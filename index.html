@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Commercial Roofing Profitability Dashboard</title>
+    <meta
+      name="description"
+      content="Static dashboard demonstration for synthetic Southwest Florida commercial roofing profitability data."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.5.3/papaparse.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="Dashboard navigation">
+        <a class="brand" href="#top" aria-label="Commercial roofing dashboard home">
+          <span class="brand-mark">CR</span>
+          <span>Roofing Profitability Demo</span>
+        </a>
+        <div class="nav-links">
+          <a href="#portfolio">Portfolio</a>
+          <a href="#drivers">Drivers</a>
+          <a href="#segments">Segments</a>
+          <a href="#next">Next Steps</a>
+        </div>
+      </nav>
+
+      <section id="top" class="hero-content">
+        <div class="hero-copy">
+          <p class="eyebrow">Southwest Florida Commercial Roofing</p>
+          <h1>Profitability Dashboard</h1>
+          <p>
+            A web-based version of the notebook analysis, built to show how completed-job
+            data can support estimating discipline, operational reviews, and smarter
+            business-development decisions.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#portfolio">View Dashboard</a>
+            <a class="button secondary" href="commercial_roofing_profitability_demo.ipynb">Open Notebook</a>
+          </div>
+        </div>
+        <aside class="notice">
+          <strong>Important note</strong>
+          <p>
+            This dashboard uses synthetic demonstration data, not actual company data.
+            It is meant to illustrate the analysis approach. Real business decisions
+            would require the contractor's actual estimating, job-costing, accounting,
+            CRM, operational, and lead-generation data.
+          </p>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section id="portfolio" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Portfolio Snapshot</p>
+          <h2>Revenue is only the starting point.</h2>
+          <p>
+            The first screen shows whether this synthetic portfolio is growing in a
+            way that also produces gross profit and healthy margin.
+          </p>
+        </div>
+
+        <div id="kpiGrid" class="kpi-grid" aria-live="polite"></div>
+
+        <div class="dashboard-grid two-column">
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Annual Revenue and Gross Profit</h3>
+              <p>Growth matters most when gross profit grows with it.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Revenue Versus Margin</h3>
+              <p>Large jobs can be great, but size alone does not protect margin.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="scatterChart"></canvas></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="drivers" class="section muted">
+        <div class="section-heading compact">
+          <p class="eyebrow">Operating Signals</p>
+          <h2>Where margin pressure starts to show up.</h2>
+        </div>
+        <div class="dashboard-grid two-column">
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Schedule Overruns and Margin</h3>
+              <p>Delayed jobs often deserve a separate post-job review.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="delayChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Hurricane-Related Work</h3>
+              <p>Storm demand can raise revenue while also adding operating strain.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="hurricaneChart"></canvas></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="segments" class="section">
+        <div class="section-heading compact">
+          <p class="eyebrow">Portfolio Mix</p>
+          <h2>Which categories deserve a closer look?</h2>
+        </div>
+        <div class="dashboard-grid three-column">
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Margin by Project Type</h3>
+              <p>Useful for pursuit strategy and estimating standards.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="projectTypeChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Margin by Lead Source</h3>
+              <p>Lead quality should be judged by profit, not just volume.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="leadSourceChart"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading">
+              <h3>Town Performance</h3>
+              <p>A simple location view for market and service-area discussion.</p>
+            </div>
+            <div class="chart-wrap"><canvas id="townChart"></canvas></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section muted">
+        <div class="section-heading compact">
+          <p class="eyebrow">Management View</p>
+          <h2>Jobs to review first.</h2>
+          <p>
+            These are the lowest-margin jobs in the synthetic portfolio. In a real
+            engagement, this table would be used as a starting point for post-job
+            review, not as a final diagnosis.
+          </p>
+        </div>
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Town</th>
+                <th>Type</th>
+                <th>Roof</th>
+                <th>Revenue</th>
+                <th>Margin</th>
+                <th>Delay</th>
+              </tr>
+            </thead>
+            <tbody id="reviewTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="next" class="section final-section">
+        <div class="section-heading">
+          <p class="eyebrow">Where Real Data Takes This</p>
+          <h2>The real value is applying this structure to actual company history.</h2>
+          <p>
+            A practical first step would be to review available estimating files,
+            accounting and job-costing exports, CRM or lead records, material and
+            labor data, and completed-job history.
+          </p>
+        </div>
+        <div class="next-grid">
+          <div>
+            <h3>Profitability diagnostic</h3>
+            <p>Find the true drivers of margin leakage and strong job selection.</p>
+          </div>
+          <div>
+            <h3>Bid discipline tool</h3>
+            <p>Flag risky quotes before the company commits to price and scope.</p>
+          </div>
+          <div>
+            <h3>Marketing ROI</h3>
+            <p>Connect lead source and customer relationship data to actual job profit.</p>
+          </div>
+          <div>
+            <h3>Storm response review</h3>
+            <p>Measure whether surge work earns enough premium after added strain.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Static GitHub Pages dashboard</span>
+      <span>Data source: synthetic_swfl_commercial_roofing_projects.csv</span>
+    </footer>
+  </body>
+</html>
